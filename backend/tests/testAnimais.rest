@@ -1,0 +1,63 @@
+# Testes de animais. Rode o login primeiro.
+### Necessário para pegar o token
+### Post
+# @name loginAutenticado
+POST http://localhost:40000/Login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "qwe",
+    "password": "qwe"
+}
+### Seta o token
+# Guarda o token do login para as próximas requisições.
+@accessToken = {{loginAutenticado.response.body.$.token}}
+@username = {{loginAutenticado.response.body.$.username}}
+
+
+### teste de buscar todos os animais
+GET http://localhost:40000/getAllAnimais HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+
+}
+
+### teste de buscar animal por ID
+GET http://localhost:40000/getAnimalByID/1 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+### teste de inserção de animal
+POST http://localhost:40000/insertAnimal HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "animalid": 0,
+    "nome": "Pintada",
+    "datanasc": "2023-05-10",
+    "removido": false
+}
+
+### teste de atualização de animal
+PUT http://localhost:40000/updateAnimal/4 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "nome": "xPintada",
+    "datanasc": "2023-05-11",
+    "removido": false
+}
+
+### teste de remoção de animal
+DELETE http://localhost:40000/deleteAnimal/4 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+### teste de remoção de animal com alocações (deve ser bloqueada)
+DELETE http://localhost:40000/deleteAnimal/1 HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
